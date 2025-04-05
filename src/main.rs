@@ -1,7 +1,10 @@
 mod api;
-use api::smhi::test;
+use api::smhi::{self, get_raw_json};
 
-fn main() {
-    println!("Hello, world!");
-    test();
+#[tokio::main]
+async fn main() {
+    match get_raw_json().await {
+        Ok(json) => println!("Svar från SMHI: {}", json),
+        Err(e) => eprintln!("Inget svar fån SMHI {}", e),
+    }
 }
