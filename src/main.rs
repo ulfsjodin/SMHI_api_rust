@@ -1,25 +1,37 @@
 mod api;
-// use std::os::linux::raw::stat;
+mod json;
 
-// use api::smhi::get_raw_json;
-use api::smhi::{fetch_json, build_url, Parametrar};
+use api::smhi::{fetch_observation, build_url, Parametrar};
+use json::parser;
 
 #[tokio::main]
 async fn main() {
-    let station = 72420;
+    // Välj station
+    // let station_id = 72420; // Landvetter
+    // let station_id = 105260; // Borlänge flygplats
+    // let station_id = 62410;  // Halmstad flygplats
+    // let station_id = 155970; // Hemavans flygplats
+    // let station_id = 74460; // Jönköping Axamo flygplats
+    // let station_id = 53300; // Malmö Sturup flygplats
+    // let station_id = 97400; // Stockholm Arlanda flygplats
+    let station_id = 127310; // Sundsvall Timrå flygplats
+    
+    // Välj parameter
+    // let parameter = Parametrar::Molnmangd; 
+    // let parameter = Parametrar::Temperatur; 
+    // let parameter = Parametrar::Luftryck; 
+    // let parameter = Parametrar::Daggpunkt; 
+    // let parameter = Parametrar::Molnbas1; 
+    // let parameter = Parametrar::Vindhastighet; 
+    let parameter = Parametrar::Vindriktning; 
+    
+    let url = build_url(parameter, station_id);
 
-    let url_temp = build_url(Parametrar::Temperatur, station);
-    let url_tryck = build_url(Parametrar::Luftryck, station);
-
-    let jsontemperatur = fetch_json(&url_temp).await.unwrap();
-    let jsontryck = fetch_json(&url_tryck).await.unwrap();
-
-    println!("hela json med temperaturer: {}", jsontemperatur);
-    println!("--------------------------------------------------------");
-    println!("hela json med lufttryck: {}", jsontryck);
-
-    // match get_raw_json().await {
-    //     Ok(json) => println!("Svar från SMHI: {:?}", json),
-    //     Err(e) => eprintln!("Inget svar fån SMHI {}", e),
-    // }
+    match fetch_observation(&url).await {
+        Ok(obs) => {
+            println!("Observation för station {}:", station_id);
+            println!("OBS! : {:#?}", &obs);
+        }
+        Err(e) => eprintln!("Fel vid hämtning: {}", e),
+    }
 }
