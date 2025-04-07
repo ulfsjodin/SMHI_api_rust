@@ -5,7 +5,7 @@ use api::smhi::{fetch_observation, build_url, Parametrar};
 use json::parser;
 
 #[tokio::main]
-async fn main() {
+async fn main() -> Result<(), Box<dyn std::error::Error>>{
     // Välj station
     // let station_id = 72420; // Landvetter
     // let station_id = 105260; // Borlänge flygplats
@@ -24,14 +24,11 @@ async fn main() {
     // let parameter = Parametrar::Molnbas1; 
     // let parameter = Parametrar::Vindhastighet; 
     let parameter = Parametrar::Vindriktning; 
-    
     let url = build_url(parameter, station_id);
+    let obs = fetch_observation(&url).await?;
 
-    match fetch_observation(&url).await {
-        Ok(obs) => {
-            println!("Observation för station {}:", station_id);
-            println!("OBS! : {:#?}", &obs);
-        }
-        Err(e) => eprintln!("Fel vid hämtning: {}", e),
+    println!("Resultatet av json från SMHI: {:#?}", obs);
+    Ok(())
+            
     }
-}
+
