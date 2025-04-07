@@ -29,8 +29,8 @@ pub struct Period {
 }
 
 #[derive(Debug, Deserialize)]
-struct Value {
-    date: i64,
-    value: String,
-    quality: String,
+pub struct Value {
+    pub date: i64,
+    pub value: String,
+    pub quality: String,
 }
