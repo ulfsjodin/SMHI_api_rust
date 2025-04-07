@@ -1,4 +1,6 @@
-use serde::Deserialize;
+// use serde::Deserialize;
+use serde::{Deserialize, Deserializer};
+use std::str::FromStr;
 
 #[derive(Debug, Deserialize)]
 pub struct Observation {
@@ -31,6 +33,26 @@ pub struct Period {
 #[derive(Debug, Deserialize)]
 pub struct Value {
     pub date: i64,
-    pub value: String,
+    #[serde(deserialize_with = "parse_tempvalue")]
+    pub value: Option<f64>,
     pub quality: String,
 }
+
+fn parse_tempvalue<'de, D>(deserializer: D) -> Result<Option<f64>, D::Error>
+    where 
+        D: Deserializer<'de>,
+        {
+            let s: Option<String> = Option::deserialize(deserializer)?;
+            match s {
+                Some(text) => {
+                    if text.trim().is_empty() || text == "NaN" {
+                        Ok(None)
+                    } else {
+                        f64::from_str(&text)
+                        .map(Some)
+                        .map_err(serde::de::Error::custom)
+                    }
+                } 
+                None => Ok(None)
+            }
+        }
