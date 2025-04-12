@@ -2,7 +2,7 @@ use serde::Deserialize;
 use serde::de::{self, Deserializer};
 use std::str::FromStr;
 
-fn parse_tempvalue<'de, D>(deserializer: D) -> Result<Option<f64>, D::Error>
+pub fn parse_tempvalue<'de, D>(deserializer: D) -> Result<Option<f64>, D::Error>
 where
     D: Deserializer<'de>,
 {
