@@ -16,7 +16,8 @@ struct TestStruct {
 #[test]
 fn test_parse_tempvalue_variants() {
     let cases = vec![
-        (r#"{"value": "3.7"}"#, Some(3.7)),
+        (r#"{"value": "3.7"}"#, Some(3.7)), 
+        (r#"{"value": "1,2"}"#, Some(1.2)),
         (r#"{"value": "NaN"}"#, None),
         (r#"{"value": "   "}"#, None),
         (r#"{"value": ""}"#, None),
