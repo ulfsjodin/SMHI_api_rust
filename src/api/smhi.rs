@@ -1,6 +1,7 @@
 use reqwest::Error;
 use crate::json::parser::Observation;
 
+#[derive(Clone, Debug)]
 pub enum Parametrar {
     Temperatur,
     Daggpunkt,

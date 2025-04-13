@@ -14,7 +14,7 @@ async fn main() -> Result<(), Box<dyn std::error::Error>>{
     // let station_id = 74460; // Jönköping Axamo flygplats
     // let station_id = 53300; // Malmö Sturup flygplats
     // let station_id = 97400; // Stockholm Arlanda flygplats
-    let station_id = 127310; // Sundsvall Timrå flygplats
+    // let station_id = 127310; // Sundsvall Timrå flygplats
     
     // Välj parameter
     // let parameter = Parametrar::Molnmangd; 
@@ -23,11 +23,25 @@ async fn main() -> Result<(), Box<dyn std::error::Error>>{
     // let parameter = Parametrar::Daggpunkt; 
     // let parameter = Parametrar::Molnbas1; 
     // let parameter = Parametrar::Vindhastighet; 
-    let parameter = Parametrar::Vindriktning; 
-    let url = build_url(parameter, station_id);
-    let obs = fetch_observation(&url).await?;
+    // let parameter = Parametrar::Vindriktning; 
+    
+    let station_ids = vec![72420, 105260];
+    let parameters = vec![Parametrar::Molnmangd, Parametrar::Temperatur];
+    for vaderobs in station_ids {
+        for params in &parameters {
+            let url = build_url(params.clone(), vaderobs);
+            let observationen = fetch_observation(&url).await?;
+            println!("_______________________");
+            println!("Data från station/er: {},  {:?}", vaderobs, params);
+            println!("-----------------------");
+            println!("Observationen >: {:#?}",  observationen);
+        }
+    }
 
-    println!("Resultatet av json från SMHI: {:#?}", obs);
+    // let url = build_url(parameter, station_id);
+    // let obs = fetch_observation(&url).await?;
+    // println!("Resultatet av json från SMHI: {:#?}", obs);
+
     Ok(())
             
     }
