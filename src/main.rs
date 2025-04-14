@@ -25,22 +25,25 @@ async fn main() -> Result<(), Box<dyn std::error::Error>>{
     // let parameter = Parametrar::Vindhastighet; 
     // let parameter = Parametrar::Vindriktning; 
     
-    let station_ids = vec![72420, 105260];
-    let parameters = vec![Parametrar::Molnmangd, Parametrar::Temperatur];
+    let station_ids = vec![72420];
+    let parameters = vec![Parametrar::Temperatur, Parametrar::Luftryck, Parametrar::Vindhastighet, Parametrar::Vindriktning];
     for vaderobs in station_ids {
         for params in &parameters {
             let url = build_url(params.clone(), vaderobs);
-            let observationen = fetch_observation(&url).await?;
-            println!("_______________________");
-            println!("Data från station/er: {},  {:?}", vaderobs, params);
-            println!("-----------------------");
-            println!("Observationen >: {:#?}",  observationen);
+            
+            match fetch_observation(&url).await {
+                Ok(obs) => {
+                    println!("_______________________");
+                    println!("Data från station/er: {},  {:?}", vaderobs, params);
+                    println!("-----------------------");
+                    println!("Observationen >: {:#?}",  obs);
+                }
+                Err(e) => {
+                    eprintln!("❌ Fel vid hämtning från station {} med parameter {:?}:\n{}", vaderobs, params, e);
+                }
+            }
         }
     }
-
-    // let url = build_url(parameter, station_id);
-    // let obs = fetch_observation(&url).await?;
-    // println!("Resultatet av json från SMHI: {:#?}", obs);
 
     Ok(())
             
