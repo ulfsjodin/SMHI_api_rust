@@ -1,6 +1,7 @@
-// use serde::Deserialize;
-use serde::{Deserialize, Deserializer};
-use std::str::FromStr;
+use serde::Deserialize;
+// use serde::{Deserialize, Deserializer};
+// use std::str::FromStr;
+use crate::json::tempvalue_parser::parse_tempvalue;
 
 #[derive(Debug, Deserialize)]
 pub struct Observation {
@@ -37,22 +38,3 @@ pub struct Value {
     pub value: Option<f64>,
     pub quality: String,
 }
-
-fn parse_tempvalue<'de, D>(deserializer: D) -> Result<Option<f64>, D::Error>
-    where 
-        D: Deserializer<'de>,
-        {
-            let s: Option<String> = Option::deserialize(deserializer)?;
-            match s {
-                Some(text) => {
-                    if text.trim().is_empty() || text == "NaN" {
-                        Ok(None)
-                    } else {
-                        f64::from_str(&text)
-                        .map(Some)
-                        .map_err(serde::de::Error::custom)
-                    }
-                } 
-                None => Ok(None)
-            }
-        }
