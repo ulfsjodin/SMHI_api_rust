@@ -2,7 +2,6 @@ mod api;
 mod json;
 
 use api::smhi::{fetch_observation, build_url, Parametrar};
-// use json::parser;
 
 #[tokio::main]
 async fn main() -> Result<(), Box<dyn std::error::Error>>{
