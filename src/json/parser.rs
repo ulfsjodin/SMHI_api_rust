@@ -1,5 +1,6 @@
 use serde::Deserialize;
 use crate::json::tempvalue_parser::parse_tempvalue;
+use crate::json::timestamp_converter::deserialize_millis_to_cest;
 
 #[derive(Debug, Deserialize)]
 pub struct Observation {
@@ -31,7 +32,8 @@ pub struct Period {
 
 #[derive(Debug, Deserialize)]
 pub struct Value {
-    pub date: i64,
+    #[serde(deserialize_with = "deserialize_millis_to_cest")]
+    pub date: String,
     #[serde(deserialize_with = "parse_tempvalue")]
     pub value: Option<f64>,
     pub quality: String,
