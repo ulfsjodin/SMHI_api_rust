@@ -1,4 +1,4 @@
-use crate::omstart_smhi::{smhi::build_url, smhi::Parametrar};
+use omstart_smhi::{smhi::build_url, smhi::Parametrar};
 
 #[test]
 fn test_build_url() {
