@@ -1,5 +1,10 @@
+pub mod db;
 pub mod api;
 pub mod json;
+
+pub use crate::db::schema;
+pub use crate::db::connection;
+pub use crate::db::operation;
 
 pub use crate::api::smhi;
 
