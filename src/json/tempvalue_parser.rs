@@ -9,10 +9,12 @@ where
     let s: Option<String> = Option::deserialize(deserializer)?;
     match s {
         Some(text) => {
-            if text.trim().is_empty() || text == "NaN" {
+            let trimmed = text.trim();
+            if trimmed.is_empty() || trimmed == "NaN" {
                 Ok(None)
             } else {
-                f64::from_str(&text)
+                let normalized = trimmed.replace(',', ".");
+                f64::from_str(&normalized)
                     .map(Some)
                     .map_err(de::Error::custom)
             }
