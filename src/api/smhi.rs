@@ -29,7 +29,19 @@ impl Parametrar {
         }
     }
 }
-
+/// Bygger en URL för SMHI:s API givet en parameter och en stationskod.
+///
+/// # Exempel
+///
+/// ```
+/// use omstart_smhi::api::smhi::{build_url, Parametrar};
+///
+/// let url = build_url(Parametrar::Temperatur, 12345);
+/// assert_eq!(
+///     url,
+///     "https://opendata-download-metobs.smhi.se/api/version/latest/parameter/1/station/12345/period/latest-day/data.json"
+/// );
+/// ```
 pub fn build_url(parametrar: Parametrar, station: u32) -> String {
     format!(
         "https://opendata-download-metobs.smhi.se/api/version/latest/parameter/{}/station/{}/period/latest-day/data.json",
