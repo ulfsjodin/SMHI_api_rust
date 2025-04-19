@@ -50,7 +50,8 @@ pub fn build_url(parametrar: Parametrar, station: u32) -> String {
     )
 }
 
-pub async fn fetch_observation(url: &str) -> Result<Observation, Error> {
+pub async fn fetch_observation(param: Parametrar, station_id: u32) -> Result<Observation, Error> {
+    let url = build_url(param, station_id);
     let response = reqwest::get(url).await?;
     let obs: Observation = response.json().await?;
     Ok(obs)
