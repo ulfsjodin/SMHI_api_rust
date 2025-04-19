@@ -42,6 +42,12 @@ dependencies = [
 ]
 
 [[package]]
+name = "api"
+version = "0.2.0"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "0891bc0dc36efe8cc0e9025e6b4db8fac47f134004fb0d00f582ae5e8387625d"
+
+[[package]]
 name = "atomic-waker"
 version = "1.1.2"
 source = "registry+https://github.com/rust-lang/crates.io-index"
@@ -777,6 +783,7 @@ dependencies = [
 name = "omstart_smhi"
 version = "0.1.0"
 dependencies = [
+ "api",
  "chrono",
  "chrono-tz",
  "reqwest",

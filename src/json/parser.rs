@@ -7,6 +7,7 @@ pub struct Observation {
     pub parameter: Parameter,
     pub station: Station,
     pub period: Period,
+    pub position: Vec<Position>,
     pub value: Vec<Value>,
 }
 
@@ -22,12 +23,30 @@ pub struct Parameter {
 pub struct Station {
     pub name: String,
     pub owner: String,
+    pub ownerCategory: String,
+    pub measuringStations: String,
+    pub height: f64,
 }
 
 #[derive(Debug, Deserialize)]
 pub struct Period {
     pub key: String,
+    #[serde(deserialize_with = "deserialize_millis_to_cest")]
+    pub from: String,
+    #[serde(deserialize_with = "deserialize_millis_to_cest")]
+    pub to: String,
     pub summary: String,
+}
+
+#[derive(Debug, Deserialize)]
+pub struct Position {
+    #[serde(deserialize_with = "deserialize_millis_to_cest")]
+    pub from: String,
+    #[serde(deserialize_with = "deserialize_millis_to_cest")]
+    pub to: String,
+    pub height: f64,
+    pub latitude: f64,
+    pub longitude: f64,
 }
 
 #[derive(Debug, Deserialize)]
