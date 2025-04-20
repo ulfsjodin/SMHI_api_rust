@@ -7,7 +7,7 @@ use omstart_smhi::parser::Position;
 // use omstart_smhi::schema;
 use rusqlite::Connection;
 use api::smhi::{fetch_observation, Parametrar};
-use db::connection::open_connection;
+use db::{connection::open_connection, operation};
 
 
 #[tokio::main]
@@ -60,6 +60,7 @@ async fn main() -> Result<(), Box<dyn std::error::Error>>{
     }
 
     let conn = Connection::open("ulf.db")?;
+    conn.execute("PRAGMA foreign_keys = ON", [])?;
     db::schema::create_station_table(&conn)?;
     db::schema::create_observation_table(&conn)?;
 
@@ -87,6 +88,25 @@ async fn main() -> Result<(), Box<dyn std::error::Error>>{
 
                         if let Err(e) = db::operation::insert_into_station(&conn, id, name, lat, long) {
                             eprintln!("Något blev fel i main: loopen för inmatning: {}", e);
+                        }
+
+                        for v in &obs.value {
+                            let timestamp = &v.date;
+                            if let Some(val) = v.value {
+                                // parameternamn som sträng
+                                let param_name = params.to_string();
+
+                            // mata in i tabellen härifrån
+                            if let Err(e) = db::operation::insert_into_observations(
+                                &conn, 
+                                id, 
+                                timestamp, 
+                                &param_name, 
+                                val,
+                            ) {
+                                eprintln!("Fel vid inmatning i observations {}", e);
+                            }
+                            }
                         }
                     }
                 }
