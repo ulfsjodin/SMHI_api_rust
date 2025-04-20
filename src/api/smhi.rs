@@ -1,5 +1,6 @@
 use reqwest::Error;
 use crate::json::parser::Observation;
+use std::fmt;
 
 #[derive(Clone, Debug)]
 pub enum Parametrar {
@@ -12,6 +13,23 @@ pub enum Parametrar {
     Vindhastighet,
     Vindriktning,
     Sikt,
+}
+
+impl fmt::Display for Parametrar {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        let s = match self {
+            Parametrar::Temperatur => "Temperatur",
+            Parametrar::Daggpunkt => "Daggpunkt",
+            Parametrar::Luftryck => "Lufttryck",
+            Parametrar::Luftfuktighet => "Luftfuktighet",
+            Parametrar::Molnmangd => "Molnmängd",
+            Parametrar::Molnbas1 => "Molnbas1",
+            Parametrar::Vindhastighet => "Vindhastighet",
+            Parametrar::Vindriktning => "Vindriktning",
+            Parametrar::Sikt => "Sikt",
+        };
+        write!(f, "{}", s)
+    }
 }
 
 impl Parametrar {
