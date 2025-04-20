@@ -4,17 +4,23 @@ mod json;
 mod importer;
 mod debug_fetch;
 
+use std::env;
+use std::path::PathBuf;
 use rusqlite::Connection;
 use api::smhi::{fetch_observation, Parametrar};
 
 #[tokio::main]
 async fn main() -> Result<(), Box<dyn std::error::Error>>{
-
     // för testning:
     // let testar = debug_fetch::test_fetch().await;
     // println!("TESTAR: {:?}", testar);
 
-    let conn = Connection::open("väderobservationer.db")?;
+    // hämtar  sökväg till körbar fil
+    let exe_path = env::current_exe()?;
+    // Få mappen där programmet körs och skapa en sökväg till databasen där
+    let db_path = exe_path.parent().unwrap().join("weather_observations.db");
+    // 
+    let conn = Connection::open(db_path)?;
     conn.execute("PRAGMA foreign_keys = ON", [])?;
     db::schema::create_station_table(&conn)?;
     db::schema::create_observation_table(&conn)?;
