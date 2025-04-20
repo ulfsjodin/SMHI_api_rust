@@ -14,15 +14,17 @@ async fn main() -> Result<(), Box<dyn std::error::Error>>{
     // let testar = debug_fetch::test_fetch().await;
     // println!("TESTAR: {:?}", testar);
 
-    let conn = Connection::open("ulf.db")?;
+    let conn = Connection::open("väderobservationer.db")?;
     conn.execute("PRAGMA foreign_keys = ON", [])?;
     db::schema::create_station_table(&conn)?;
     db::schema::create_observation_table(&conn)?;
 
-    let station_ids = vec![105260];
+    let station_ids = vec![53300, 72420, 97400, 127310];
     let parameters = vec![
         Parametrar::Temperatur,
         Parametrar::Luftfuktighet,
+        Parametrar::Daggpunkt,
+        Parametrar::Molnmangd,
         Parametrar::Vindhastighet,
         Parametrar::Vindriktning,
     ];
