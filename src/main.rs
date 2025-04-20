@@ -2,62 +2,17 @@ mod db;
 mod api;
 mod json;
 mod importer;
+mod debug_fetch;
 
-use omstart_smhi::parser::Position;
-// use omstart_smhi::schema;
 use rusqlite::Connection;
 use api::smhi::{fetch_observation, Parametrar};
-use db::{connection::open_connection, operation};
-
 
 #[tokio::main]
 async fn main() -> Result<(), Box<dyn std::error::Error>>{
 
-    // Välj station
-    // let station_id = 72420; // Landvetter
-    // let station_id = 105260; // Borlänge flygplats
-    // let station_id = 62410;  // Halmstad flygplats
-    // let station_id = 155970; // Hemavans flygplats
-    // let station_id = 74460; // Jönköping Axamo flygplats
-    // let station_id = 53300; // Malmö Sturup flygplats
-    // let station_id = 97400; // Stockholm Arlanda flygplats
-    // let station_id = 127310; // Sundsvall Timrå flygplats
-    
-    // Välj parameter
-    // let parameter = Parametrar::Molnmangd; 
-    // let parameter = Parametrar::Temperatur; 
-    // let parameter = Parametrar::Luftryck; 
-    // let parameter = Parametrar::Daggpunkt; 
-    // let parameter = Parametrar::Molnbas1; 
-    // let parameter = Parametrar::Vindhastighet; 
-    // let parameter = Parametrar::Vindriktning; 
-    
-    let station_ids = vec![53300];
-    let parameters = vec![Parametrar::Temperatur, Parametrar::Luftryck, Parametrar::Vindhastighet, Parametrar::Vindriktning];
-    
-    //  för testning
-    // let stationen= 53300;
-    // let parameters = vec![Parametrar::Temperatur];
-    // let getit = fetch_observation(Parametrar::Temperatur, stationen).await;
-    // println!("<<<test>>>: {:#?}", getit);
-    
-    for vaderobs in station_ids {
-        for params in &parameters {
-            // let url = build_url(params.clone(), vaderobs);
-            
-            match fetch_observation(params.clone(), vaderobs).await {
-                Ok(obs) => {
-                    println!("_______________________");
-                    println!("Data från station/er: {},  {:?}", vaderobs, params);
-                    println!("-----------------------");
-                    // println!("Observationen >: {:#?}",  obs);
-                }
-                Err(e) => {
-                    eprintln!("❌ Fel vid hämtning från station {} med parameter {:?}:\n{}", vaderobs, params, e);
-                }
-            }
-        }
-    }
+    // för testning:
+    // let testar = debug_fetch::test_fetch().await;
+    // println!("TESTAR: {:?}", testar);
 
     let conn = Connection::open("ulf.db")?;
     conn.execute("PRAGMA foreign_keys = ON", [])?;

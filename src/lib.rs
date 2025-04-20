@@ -1,6 +1,7 @@
 pub mod db;
 pub mod api;
 pub mod json;
+pub mod debug_fetch;
 pub mod importer;
 
 pub use crate::api::smhi;
