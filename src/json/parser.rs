@@ -2,6 +2,16 @@ use serde::Deserialize;
 use crate::json::tempvalue_parser::parse_tempvalue;
 use crate::json::timestamp_converter::deserialize_millis_to_cest;
 
+/// Samlar ihop de olika structen i en "samlings-struct"
+/// 
+/// Data från parameter med fälten:
+/// key, name, summary och unit
+/// 
+/// Data från station med fälten:
+/// [STATIONEN]
+/// name, owner, ownerCategory, measuringStations, och height
+/// 
+
 #[derive(Debug, Deserialize)]
 pub struct Observation {
     pub parameter: Parameter,
